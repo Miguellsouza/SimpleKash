@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+    <title>SimpleKash</title>
+    <style>
+        /*Estilo geral*/
+        html body{
+            margin: 0px;
+            padding: 0px;
+            min-height: 100vh;
+        }
+
+        body{
+            display: flex;
+            font-family: sans-serif;
+            background-color: #000000;
+        }
+
+        body h1,
+        body h2,
+        body h3{
+            color: #eae4d9; /*bege claro para texto*/
+        }
+
+        body p{
+            color: #888888;
+        }
+
+        aside{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-right: solid 2px #222222;
+            background-color: #111111;
+            width: 300px;
+            height: 100vh;
+
+            position: sticky;
+            left: 0;
+            top: 0;    
+        }
+
+        aside span{
+            color: #888888;
+        }
+
+        main{
+            flex: 1;
+        }
+
+        input:focus{
+            outline: none;
+        }
+
+        input::placeholder{
+            padding-left: 8px;
+            font-family: sans-serif;
+            font-size: 20px;
+        }
+
+        /*Informações do usuário na sidebar / própria sidebar*/
+        #div-info-user{
+            display: flex;
+            flex-direction: column;
+            margin-top: 100px;
+            align-items: center;
+            gap: 16px;
+        }
+
+        #div-user{
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            gap: 0;
+        }
+
+        #div-user h3,
+        #div-user p{
+            margin: 0;
+        }
+
+        #div-border-image{
+            display: flex;
+            width: 120px;
+            height: 120px;
+            border: solid 2px #777777;
+            border-radius: 60px;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        #profileAvatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 100%;
+        }
+
+        .btn-outline{
+            background-color: #111111;
+            font-weight: bold;
+            color: #eae4d9;
+            height: 50px;
+            width: 200px;
+            border: solid 1px #333333;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .btn-outline:hover{
+            background-color: #222222;
+            border: solid 1px #333333;
+        }
+
+            
+        #topbar{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 24px;
+            padding-left: 48px;
+            padding-right: 48px;
+        }
+
+        #topbar-text{
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+        }
+
+        #topbar-text h1{
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        #topbar-text p{
+            margin-top: 0;
+        }
+
+        /*Configurações do Header*/
+
+        #btn-primary{
+            background-color: #d4c4a8;
+            font-weight: bold;
+            color: #000000;
+            height: 50px;
+            width: 200px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #btn-primary:hover{
+            background-color: #bba98e;
+        }
+
+        /*Estilo do resumo financeiro / summary*/
+
+        #summary{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-left: 48px;
+            padding-right: 48px;
+        }
+
+        .summary-item-balance{
+            display: flex;
+            flex-direction: column;
+            width: 370px;
+            height: 120px;
+            background-color: #d4c4a8;
+            border: solid 1px #bba98e;
+            padding-top: 20px;
+            padding-left: 20px;
+            border-radius: 20px;
+            line-height: 2px;
+        }
+
+        .summary-item-balance:hover{
+            border: solid 1px #222222;
+            background-color: #bba98e;
+        }
+
+        .summary-item-balance p{
+            color: #222222;
+        }
+
+        .summary-item-balance p,
+        .summary-item p{
+            font-size: .875rem;
+        }
+
+        .summary-item-balance h1{
+            font-weight: 800;
+            color: #000000;
+        }
+
+        .summary-item{
+            display: flex;
+            flex-direction: column;
+            width: 250px;
+            background-color: #111111;
+            border: solid 2px #222222;
+            padding-top: 20px;
+            padding-left: 20px;
+            border-radius: 20px;
+            line-height: 2px;
+        }
+
+        .summary-item:hover{
+            background-color: #222222;
+        }
+
+        .summary-value-income{
+            color: #d4c4a8;
+        }
+
+        .summary-value-expense{
+            color: #777777;
+        }
+
+        .summary-label{
+            font-size: .875rem
+        }
+
+        /*Adicionar transações*/
+
+        #section-history{
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            padding-left: 48px;
+            padding-right: 48px;
+            box-sizing: border-box;
+        }
+
+        #add-history{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 95.5%;
+            height: 150px;
+            align-items: center;
+            background-color: #111111;
+            border: solid 2px #222222;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        #add-history input{
+            color: #eae4d9;
+            border: solid 1px #222222;
+            border-radius: 10px;
+            background-color: #000000;
+            height: 40px;
+            width: 220px;
+            font-size: 20px;
+        }
+
+        #add-history input[type=date]{
+            color-scheme: dark;
+            padding-left: 8px;
+            color: #eae4d9;
+            width: 200px;
+            font-size: 20px;
+        }
+
+        #add-history input[type=date]::-webkit-calendar-picker-indicator{
+            padding-right: 8px;
+            cursor: pointer;
+        }      
+
+        #add-history input::placeholder{
+            color: #222222;
+        }
+
+        #add-history input:focus::placeholder{
+            border: none;
+            color: transparent;
+        }
+
+        #adicionar-despesa{
+            background-color: #d4c4a8;
+            font-weight: bold;
+            color: #000000;
+            height: 50px;
+            width: 200px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #adicionar-despesa:hover{
+            background-color: #bba98e;
+        }
+
+        #div-radio-button{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0;
+        }
+
+        .div-opcoes{
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            gap: 4px;
+        }
+
+        .div-opcoes label{
+            color: #eae4d9;
+            font-weight: bold;
+            padding-left: 4px;
+        }
+
+        #conteiner-radio{
+            display: inline-flex;
+            width: 150px;
+            background-color: #000000;
+            border: solid 1px #222222;
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        #conteiner-radio label{
+            flex: 1px;
+            text-align: center;
+            padding: 8px 12px;
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #222222;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.9 ease;
+            user-select: none;
+        }
+
+        #conteiner-radio input[type=radio]{
+            display: none;
+        }
+
+        #conteiner-radio input[type=radio]:checked + label{
+            background-color: #d4c4a8;
+            color: #222222;
+        }
+
+        #div-lines-write{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0px;
+        }
+
+        /*Histórico de transações*/
+        #history{
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            margin-top: 20px;
+            margin-left: 48px;
+            margin-right: 48px;
+            box-sizing: border-box;
+            background-color: #111111;
+            border: solid 2px #222222;
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        #lista-despesas{
+            list-style-type: none;
+        }
+
+        #lista-despesas li{
+            font-size: .875rem;
+            color: #222222; 
+        }
+
+        /*pop-up*/
+
+        #pop-up{
+            width: 400px;
+            height:400px;
+            align-items: center;
+            background-color: #111111;
+            border: solid 2px #222222;
+            border-radius: 20px;      
+            box-shadow: 0 0px 12px rgba(0, 0, 0, 0.9);      
+        }
+
+        #pop-up input{
+            display: none;
+        }
+
+        #pop-up::backdrop{
+            backdrop-filter: blur(2px);
+        }
+
+        #label-pop{
+            display: inline-block;
+            background-color: #111111;
+            font-weight: 700;
+            color: #eae4d9;
+            height: 100px;
+            width: 400px;
+            border: solid 1px #333333;
+            border-radius: 10px;
+            cursor: pointer; 
+            font-family: sans-serif;
+            color: #eae4d9;
+            padding: 40px 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        #label-pop:hover{
+            background-color: #222222;
+            border: solid 1px #333333;
+        }
+
+        .btn-pop-up{
+            background-color: #111111;
+            font-weight: bold;
+            color: #eae4d9;
+            height: 50px;
+            width: 180px;
+            border: solid 1px #333333;
+            border-radius: 10px;
+            cursor: pointer; 
+        }
+
+        .btn-pop-up:hover{
+            background-color: lightcoral;
+            border: solid 2px rgb(116, 47, 47);
+            color: darkred;
+        }
+
+        #add-btn-pop:hover{
+            background-color: lightgreen;
+            border: solid 2px green;
+            color: green;
+        }
+
+        #div-pop-up{
+            display: flex;
+            flex-direction: column;
+            gap: 97px;
+            text-align: center;
+        }
+
+        #pop-up-btns{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /*Lista histórico*/
+
+        #msm-waiting{
+            text-align: center;
+        }
+
+        .divGeral{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: solid 1px #222222;
+        }
+
+        .divTituloeDesc{
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .divTituloeDesc h3,
+        .divTituloeDesc p
+        .divTituloeDesc li{
+            margin: 0;
+            padding: 0;
+        }
+
+        .divSalarioeBotoes{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .divBotoes{
+            display: flex;
+        }
+
+        .divBotoes button{
+            border: none;
+            background-color: #111111;
+            color: #777777;
+        }
+
+        .divBotoes button:hover{
+            color: #eae4d9;
+        }
+
+        .tituloDescGanho{
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .GanhoDespesa{
+            display: flex;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <!--Barra Lateral-->
+    <aside>
+        <h2>Simple<span>Kash</span></h2>
+        <div id="div-info-user">
+            <div id="div-border-image">
+                <img id="profileAvatar" class="avatar" alt="Foto de perfil" src="https://ui-avatars.com/api/?name=User&background=d4c4a8&color=000000&size=50">
+            </div>
+            <div id="div-user">
+                <h3>default_nome</h3>
+                <p>default_desc</p>
+            </div>
+            <button type="button" id="openProfileModal" class="btn-outline">Editar perfil</button>
+        </div>
+    </aside>
+    <main>
+        <header id="topbar">
+            <div id="topbar-text">
+                <h1>Visão geral</h1>
+                <p>Acompanhe seus ganhos e despesas do mês.</p>
+            </div>
+            <button type="button" class="pop-up-btn" id="btn-primary">Adicionar arquivo</button>
+        </header>
+        <!--Resumo financeiro-->
+        <section id="summary">
+            <div class="summary-item-balance">
+                <p class="summary-label">Saldo atual</p>
+                <h1 class="summary-value" id="totalBalance">R$ 0,00</h1>
+            </div>
+            <div class="summary-item">
+                <p class="summary-label">Ganhos</p>
+                <h1 class="summary-value-income" id="total">R$ 0,00</h1>
+            </div>
+            <div class="summary-item">
+                <p class="summary-label">Despesas</p>
+                <h1 class="summary-value-expense" id="totalExpense">R$ 0,00</h1>
+            </div>
+        </section>
+        <!--Form para adicionar a transação-->
+        <section id="section-history">
+            <div id="add-history">
+                <div id="div-radio-button">
+                    <div class="div-opcoes">
+                        <label for="conteiner-radio">Tipo</label>
+                        <div id="conteiner-radio">
+                            <input type="radio" name="tipo" id="ganho" value="ganho">
+                            <label for="ganho">Ganho</label>
+                            <input type="radio" name="tipo" id="despesa" value="despesa" checked>
+                            <label for="despesa">Despesa</label>
+                        </div>
+                    </div>
+                    <button id='adicionar-despesa' type="button">+ Adicionar transação</button>
+                </div>
+                <div id="div-lines-write">
+                    <div class="div-opcoes">
+                        <label for="Nome-da-despesa">Título</label>
+                        <input type="text" name="Nome-da-despesa" id="nome-despesa" step="any" placeholder="Nome">
+                    </div>
+                    <div class="div-opcoes">
+                        <label for="desc-despesa">Descrição (opcional)</label>
+                        <input type="text" name="desc-transacao" id="desc-transacao" step="any" placeholder="Descrição">
+                    </div>
+                    <div class="div-opcoes">
+                        <label for="valor-despesa">Valor (R$)</label>
+                        <input type="number" name="Valor-transacao" id="valor-despesa" step="any" placeholder="Valor">
+                    </div>
+                    <div class="div-opcoes">
+                        <label for="data-transacao">Data</label>
+                        <input type="date" name="data-transacao" id="data-transacao" step="any">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Local onde aparece o Histórico-->
+        <section id="history">
+            <h2>Histórico de Transações</h2>
+            <ul id="lista-despesas"></ul>
+            <p id="msm-waiting">Nenhuma transação ainda. Clique em "Adicionar transação" para começar.</p>
+        </section>
+    </main>
+    <!--pop-up adicionar arquivo-->
+    <dialog id="pop-up">
+        <div id="div-pop-up">
+            <div id="div-input-pop">
+                <label for="adicionar-arquivo" id="label-pop">📁 Escolher Arquivo</label>
+                <input type="file" name="" id="adicionar-arquivo" accept=".json">
+            </div>
+            <p id="nome-do-arquivo">Nenhum arquivo selecionado</p>
+            <div id="pop-up-btns">
+                <button class="btn-pop-up" id="close-btn-pop">Fechar</button>
+                <button class="btn-pop-up" id="add-btn-pop">Adicionar</button>
+            </div>
+        </div>
+    </dialog>
+    <script>
+        //=== Modal pop-up adicionar arquivo ===
+        const pop = document.querySelector('#pop-up');
+        const openpop = document.querySelector('.pop-up-btn');
+        const closepop = document.querySelector('#close-btn-pop');
+
+        openpop.addEventListener('click', () => {
+            pop.showModal();
+        });
+
+        closepop.addEventListener('click', () => {
+            pop.close();
+        });
+
+        //=== Mostra se o arquivo foi adicionado ===
+        const arquivo = document.getElementById('adicionar-arquivo');
+        let msm_p = document.getElementById('nome-do-arquivo');
+
+        arquivo.addEventListener('change', () => {
+            if (arquivo.value !== "") {
+                msm_p.innerText = `${arquivo.files[0].name}`;
+            } else if (arquivo.files.length > 1) {
+                msm_p.innerText = 'Só é possivel adicionar 1 arquivo por vez';
+                arquivo.value = '';
+            } else {
+                msm_p.innerText = 'Nenhum arquivo selecionado';
+            }
+        });
+
+        //=== Data automatica ===
+        const data = document.getElementById('data-transacao');
+        const dataatual = new Date();
+        const ano = dataatual.getFullYear();
+
+        const mes = String(dataatual.getMonth() + 1).padStart(2, '0');
+        const dia = String(dataatual.getDate()).padStart(2, '0');
+
+        const dataformatada = `${ano}-${mes}-${dia}`;
+        data.value = dataformatada;
+
+        //=== Histórico ===
+        const lista = document.getElementById('lista-despesas');
+        const msnWaiting = document.getElementById('msm-waiting');
+
+        let info = {
+            usuario: {
+                nome: '',
+                descricao: '',
+                foto: null
+            },
+            transacoes: []
+        };
+
+        //=== Função de renderização ===
+        function renderizarTransacao(transacao) {
+
+            // Criação de tags e classes
+            const divGeral = document.createElement('div');
+            divGeral.classList.add('divGeral');
+
+            const divTituloeDesc = document.createElement('div');
+            divTituloeDesc.classList.add('divTituloeDesc');
+
+            const divSalarioeBotoes = document.createElement('div');
+            divSalarioeBotoes.classList.add('divSalarioeBotoes');
+
+            const divBotoes = document.createElement('div');
+            divBotoes.classList.add('divBotoes');
+
+            const GanhoDespesa = document.createElement('div');
+            GanhoDespesa.classList.add('GanhoDespesa');
+
+            const tituloDescGanho = document.createElement('div');
+            tituloDescGanho.classList.add('tituloDescGanho');
+
+            const up = document.createElement('i');
+            up.className = 'fa-solid fa-arrow-trend-up';
+
+            const down = document.createElement('i');
+            down.className = 'fa-solid fa-arrow-trend-down';
+
+            const lidesp = document.createElement('li');
+            const titulo = document.createElement('h3');
+            const descp = document.createElement('p');
+            const salario = document.createElement('h3');
+
+            // Criação dos botões
+            const excluir_btn = document.createElement('button');
+            const editar_btn = document.createElement('button');
+
+            excluir_btn.textContent = 'Excluir';
+            editar_btn.textContent = 'Editar';
+
+            // Exclusão visual (a exclusão permanente será implementada depois)
+            excluir_btn.addEventListener('click', function() {
+                divGeral.remove();
+
+                if (lista.children.length === 0) {
+                    msnWaiting.style.display = 'block';
+                }
+            });
+
+            // Verifica se é ganho ou despesa
+            if (transacao.tipo === 'ganho') {
+
+                salario.textContent = `+ ${transacao.valor}`;
+
+                GanhoDespesa.appendChild(up);
+                GanhoDespesa.style.backgroundColor = 'lightgreen';
+                GanhoDespesa.style.border = 'solid 2px green';
+                GanhoDespesa.style.color = 'green';
+
+            } else {
+
+                salario.textContent = `- ${transacao.valor}`;
+
+                GanhoDespesa.appendChild(down);
+                GanhoDespesa.style.backgroundColor = 'lightcoral';
+                GanhoDespesa.style.border = 'solid 2px rgb(116, 47, 47)';
+                GanhoDespesa.style.color = 'darkred';
+            }
+
+            // Preenchimento das informações
+            titulo.textContent = transacao.titulo;
+
+            const [ano, mes, dia] = transacao.data.split('-');
+
+            if (transacao.descricao) {
+                descp.textContent = `${transacao.descricao} - ${dia}/${mes}/${ano}`;
+            } else {
+                descp.textContent = `${dia}/${mes}/${ano}`;
+            }
+
+            lidesp.appendChild(titulo);
+
+            divTituloeDesc.appendChild(lidesp);
+            divTituloeDesc.appendChild(descp);
+
+            tituloDescGanho.appendChild(GanhoDespesa);
+            tituloDescGanho.appendChild(divTituloeDesc);
+
+            // Div salário e botões
+            divBotoes.appendChild(excluir_btn);
+            divBotoes.appendChild(editar_btn);
+
+            divSalarioeBotoes.appendChild(salario);
+            divSalarioeBotoes.appendChild(divBotoes);
+
+            // Adiciona tudo à div principal
+            divGeral.appendChild(tituloDescGanho);
+            divGeral.appendChild(divSalarioeBotoes);
+
+            lista.prepend(divGeral);
+
+            // Esconde mensagem de histórico vazio
+            msnWaiting.style.display = 'none';
+        }
+
+        //=== Carregamento inicial dos dados ===
+        let erroCarregamento = null;
+
+        const dadosCarregados = window.simplekash.carregarDados()
+            .then((dados) => {
+
+                const usuario = dados.usuario || {};
+
+                info = {
+                    usuario: {
+                        nome: usuario.nome || '',
+                        descricao: usuario.descricao || '',
+                        foto: usuario.foto || null
+                    },
+                    transacoes: Array.isArray(dados.transacoes)
+                        ? dados.transacoes
+                        : []
+                };
+
+                // Renderiza todas as transações salvas
+                info.transacoes.forEach((transacao) => {
+                    renderizarTransacao(transacao);
+                });
+
+                console.log(info);
+            })
+            .catch((erro) => {
+                erroCarregamento = erro;
+                console.error('Erro ao carregar dados:', erro);
+            });
+
+        //=== Adicionar transação ===
+        document.getElementById('adicionar-despesa').addEventListener('click', async function() {
+
+            // Aguarda o carregamento inicial do JSON
+            await dadosCarregados;
+
+            if (erroCarregamento) {
+                window.alert('Não foi possível carregar os dados.');
+                return;
+            }
+
+            const nome = document.getElementById('nome-despesa');
+            const number = document.getElementById('valor-despesa');
+            const desc = document.getElementById('desc-transacao');
+
+            const num = Number(number.value);
+
+            // Verifica se os campos obrigatórios estão vazios
+            if (nome.value === '' || number.value === '') {
+                window.alert('Digite para adicionar a despesa');
+                return;
+            }
+
+            // Criação do objeto da nova transação
+            const novaTransacao = {
+                id: crypto.randomUUID(),
+                titulo: nome.value,
+                descricao: desc.value,
+                valor: num,
+                data: data.value,
+                tipo: document.querySelector('input[name="tipo"]:checked').value
+            };
+
+            // Adiciona ao array
+            info.transacoes.push(novaTransacao);
+
+            try {
+
+                // Salva o objeto completo no JSON
+                await window.simplekash.salvarDados(info);
+
+                // Renderiza a nova transação na interface
+                renderizarTransacao(novaTransacao);
+
+                window.alert('Transação adicionada!');
+
+                // Limpa os campos
+                nome.value = '';
+                number.value = '';
+                desc.value = '';
+
+            } catch (erro) {
+
+                // Reverte a inclusão no array caso a gravação falhe
+                info.transacoes = info.transacoes.filter(
+                    transacao => transacao.id !== novaTransacao.id
+                );
+
+                console.error('Erro ao salvar transação:', erro);
+                window.alert('Não foi possível salvar a transação.');
+            }
+        });
+    </script>
+
+</body>
+</html>
