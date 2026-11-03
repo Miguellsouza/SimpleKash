@@ -7,7 +7,8 @@
   "type": "commonjs",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "check": "node --check main.js && node --check preload.js"
   },
   "devDependencies": {
     "electron": "^45.1.0"
